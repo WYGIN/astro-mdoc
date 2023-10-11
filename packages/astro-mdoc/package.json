@@ -1,0 +1,32 @@
+{
+  "name": "astro-mdoc",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "keywords": [
+    "astro-markdoc-ssr",
+    "astro-mdoc-ssr",
+    "astro-mdoc",
+    "astro-markdoc",
+    "markdoc",
+    "mdoc",
+    "astro",
+    "withastro",
+    "astro-integration"
+  ],
+  "exports": {
+    "./*": "./src/*"
+  },
+  "peerDependencies": {
+    "astro": "^3.2.0"
+  },
+  "devDependencies": {
+    "astro": "^3.2.4"
+  }
+}
