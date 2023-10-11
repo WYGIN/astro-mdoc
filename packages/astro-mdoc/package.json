@@ -27,6 +27,11 @@
     "astro": "^3.2.0"
   },
   "devDependencies": {
+    "@types/node": "^20.8.4",
     "astro": "^3.2.4"
+  },
+  "dependencies": {
+    "@markdoc/markdoc": "^0.3.2",
+    "nanoid": "^5.0.1"
   }
 }

@@ -1,5 +1,6 @@
 {
   "extends": "astro/tsconfigs/strict",
+  "include": ["src"],
   "compilerOptions": {
     "allowJs": true,
     "checkJs": true
