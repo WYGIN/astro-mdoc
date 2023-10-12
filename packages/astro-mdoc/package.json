@@ -9,6 +9,8 @@
     "preview": "astro preview",
     "astro": "astro"
   },
+  "files": ["./src"],
+  "main": "./src/index.ts",
   "keywords": [
     "astro-markdoc-ssr",
     "astro-mdoc-ssr",
@@ -20,15 +22,13 @@
     "withastro",
     "astro-integration"
   ],
-  "exports": {
-    "./*": "./src/*"
-  },
   "peerDependencies": {
     "astro": "^3.2.0"
   },
   "devDependencies": {
     "@types/node": "^20.8.4",
-    "astro": "^3.2.4"
+    "astro": "^3.2.4",
+    "vite": "^4.4.11"
   },
   "dependencies": {
     "@markdoc/markdoc": "^0.3.2",

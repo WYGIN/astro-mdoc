@@ -5,21 +5,20 @@ import type { AstroConfig } from "astro";
 import type { MarkdocUserConfig } from '../utils/userConfig';
 import { ACFMap } from "../factory/acfMap";
 import type { Config } from "@markdoc/markdoc";
+import { defineConfig } from 'vite';
 
 function resolveVirtualModuleId<T extends string>(id: T): `\0${T}` {
 	return `\0${id}`;
 }
 
 export function vitePluginAstroMarkdocSSr(options: MarkdocUserConfig, { root }: Pick<AstroConfig, 'root'>, markdocConfig: Config): NonNullable<ViteUserConfig['plugins']>[number] {
-    const resolveId = (id: string) =>
-		JSON.stringify(id.startsWith('.') ? resolve(fileURLToPath(root), id) : id);
+    const resolveId = (id: string) => JSON.stringify(id.startsWith('.') ? resolve(fileURLToPath(root), id) : id);
     const modules = {
         'virtual:wygin/user-config': `export default ${JSON.stringify(options)}`,
         'virtual:wygin/markdoc-unique-imports': `export default ${JSON.stringify(ACFMap.get())}`,
         'virtual:wygin/markdoc-config': `export default ${JSON.stringify(markdocConfig)}`,
         'virtual:wygin/project-context': `export default ${JSON.stringify(root)}`,
-		'virtual:wygin/astro-markdoc-ssr-renderer': `
-			---
+		'virtual:wygin/astro-markdoc-ssr-renderer': `---
 			${ACFMap.get().forEach(item => {
 				return `const ${item.name} = ${item}`
 			})}

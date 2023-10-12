@@ -11,6 +11,6 @@
   },
   "dependencies": {
     "astro": "^3.2.4",
-    "astro-mdoc": "workspace:^"
+    "astro-mdoc": "workspace:*"
   }
 }
