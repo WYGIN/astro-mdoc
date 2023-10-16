@@ -10,6 +10,9 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "^7.5.3",
+    "@astrojs/react": "^3.0.3",
+    "@markdoc/markdoc": "^0.3.2",
     "astro": "^3.2.4",
     "astro-mdoc": "workspace:*"
   }

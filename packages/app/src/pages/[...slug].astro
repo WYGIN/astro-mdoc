@@ -1,0 +1,23 @@
+---
+import { MarkdocRenderer } from 'astro-mdoc/src/virtual/index.js'
+import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
+const { slug } = Astro.params;
+import { UniqueImports, MarkdocConfig, ProjectContext, UserConfig } from "astro-mdoc/src/virtual/index";
+const Renderer = MarkdocRenderer({ source: `
+    {% callout type="check" %}
+        Markdoc is open-source—check out its [source](http://github.com/markdoc/markdoc) to see how it works.
+    {% /callout %}
+` 
+});
+---
+{
+    Array.isArray(Renderer) ? (
+        Renderer.map((Component: AstroComponentFactory) => <Component />)
+    ) : (
+        <Renderer />
+    )
+}
+<>UniqueImports: {JSON.stringify(UniqueImports)}</>
+<>MarkdocConfig: {JSON.stringify(MarkdocConfig)}</>
+<>ProjectContext: {JSON.stringify(ProjectContext)}</>
+<>UserConfig: {JSON.stringify(UserConfig)}</>
