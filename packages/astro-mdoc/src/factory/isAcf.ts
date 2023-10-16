@@ -2,17 +2,22 @@ import { createComponent, renderComponent, renderTemplate } from "astro/runtime/
 import { isAstroComponentFactory, type AstroComponentFactory } from "astro/runtime/server/render/astro/factory.js";
 import { getImportSafeName } from "./acfMap";
 
-export const toACF = (component: string | object | Node | Element | AstroComponentFactory, rename?: boolean): AstroComponentFactory => {
-    if(!isAstroComponentFactory(component) || rename) {
-        component = acf(component);
+export const toACF = (component: unknown): AstroComponentFactory => {
+    if(!isAstroComponentFactory(component)) {
+        let acfComp = acf(component);
+        return acfComp
+    } else {
+        return component;
     }
-    return component as AstroComponentFactory;
 }
 
-export const acf = (component: string | object | Node | Element | AstroComponentFactory): AstroComponentFactory => {
-    return createComponent({
+export const acf = (component: unknown): AstroComponentFactory => {
+    const name = getImportSafeName(4)
+    const c = createComponent({
         factory(result: any, props: any, slots: any) {
-            return renderTemplate`${renderComponent(result, getImportSafeName(4), component, props, slots)}`
-        }
+            return renderTemplate`${renderComponent(result, 'name', component, props, slots)}`
+        },
+        moduleId: name
     })
+    return c;
 }

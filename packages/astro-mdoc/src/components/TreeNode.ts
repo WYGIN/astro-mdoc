@@ -35,6 +35,13 @@ export type TreeNode =
 			children: TreeNode[];
 	  };
 
+const n = createComponent({
+	factory(result, props, slots) {
+		return renderTemplate`${renderComponent(result, 'ComponentNode',ComponentNode, { treeNode: Promise.all(props.map(({ va }: { va: RenderableTreeNode }) => createTreeNode(va))).then(v => v) })}`
+	},
+	propagation: 'self',
+})
+
 export const ComponentNode = createComponent({
 	factory(result: any, { treeNode }: { treeNode: TreeNode }) {
 		if (treeNode.type === 'text') return render`${treeNode.content}`;

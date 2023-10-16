@@ -18,6 +18,11 @@ declare module 'virtual:wygin/project-context' {
     export default Config;
 }
 
+declare module 'virtual:wygin/acf-component' {
+    const Config: AstroComponentFactory
+    export default Config
+}
+
 declare module 'virtual:wygin/astro-markdoc-ssr-renderer' {
     const Config: import('astro/runtime/server/index.js').AstroComponentFactory | import('astro/runtime/server/index.js').AstroComponentFactory[];
     export default Config;
