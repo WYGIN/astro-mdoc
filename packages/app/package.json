@@ -14,6 +14,10 @@
     "@astrojs/react": "^3.0.3",
     "@markdoc/markdoc": "^0.3.2",
     "astro": "^3.2.4",
-    "astro-mdoc": "workspace:*"
+    "astro-mdoc": "workspace:*",
+    "copy-to-clipboard": "^3.3.3",
+    "prismjs": "^1.29.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }
 }

@@ -6,7 +6,7 @@ import * as fs from 'node:fs';
 import { getMarkdocPath, type MarkdocPath } from "./utils/userConfig";
 import type { Config } from "@markdoc/markdoc";
 import { getNamedImport } from "./utils/namedImports";
-import { ACFMap } from "./factory/acfMap";
+import { ACFMap, acfMap } from "./factory/acfMap";
 
 export default function AstroMarkdocSSR(options: MarkdocUserConfig): AstroIntegration {
     return AstroMarkdocSSRConfig({ options })
@@ -42,7 +42,6 @@ const getNodes = async (nodeUrl: URL, root: AstroConfig['root'], isNode: boolean
         await Promise.all(partials.map( async partial => {
             const partialFileName = partial.pathname.split("/")
             const data = await fs.promises.readFile(partial.href.split(root.href)[1], 'utf8')
-            // ACFMap.add(data, partialFileName[partialFileName.length - 1])
             Object.assign(node, { [partialFileName[partialFileName.length - 1]]: data})
         }))
     } else {
@@ -53,13 +52,11 @@ const getNodes = async (nodeUrl: URL, root: AstroConfig['root'], isNode: boolean
                 const o = obj[namedImport]
                 ACFMap.add(o.render, namedImport);
                 Object.assign(node, { [namedImport] : { ...o, render: namedImport } });
-                console.log("getNode for Node: ", { ...o, render: namedImport })
             } else{
                 Object.assign(node, { [namedImport]: obj[namedImport] });
             }
         }
     }
-    console.log("getNode: ", node)
     return node;
 }
 
@@ -70,13 +67,6 @@ export const markdocUserConfig = async ({ root }: AstroConfig, path?: MarkdocPat
     const p = await Promise.resolve(getNodes(partials, root, false))
     const v = await Promise.resolve(getNodes(variables, root, false))
     const f = await Promise.resolve(getNodes(functions, root, false))
-    console.log("markdocUserConfig", {
-        nodes: n,
-        tags: t,
-        partials: p,
-        variables: v ,
-        functions: f,
-    })
     return {
         nodes: n,
         tags: t,

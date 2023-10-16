@@ -7,3 +7,5 @@ export const getNamedImport = (component: object): string[] => {
         }
     }) ?? []
 }
+
+// export const getNamedImport = (component: Object): string[] => Object.keys(component)

@@ -1,11 +1,13 @@
+import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
+import type { unknown } from 'astro/zod';
 declare module 'virtual:wygin/user-config' {
     const Config: import('./utils/userConfig').MarkdocUserConfig;
     export default Config;
 }
 
 declare module 'virtual:wygin/markdoc-unique-imports' {
-    const Config: typeof import('./factory/acfMap').acfMap;
-    export default Config;
+    const Config: any
+    export default Config
 }
 
 declare module 'virtual:wygin/markdoc-config' {
@@ -24,6 +26,6 @@ declare module 'virtual:wygin/acf-component' {
 }
 
 declare module 'virtual:wygin/astro-markdoc-ssr-renderer' {
-    const Config: import('astro/runtime/server/index.js').AstroComponentFactory | import('astro/runtime/server/index.js').AstroComponentFactory[];
+    const Config: Promise<AstroComponentFactory>
     export default Config;
 }
