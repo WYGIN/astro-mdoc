@@ -4,7 +4,7 @@ import type { AstroUserConfig } from "astro/config";
 import { vitePluginAstroMarkdocSSR } from "./vite/astroMarkdocSSR";
 import * as fs from 'node:fs';
 import { getMarkdocPath, type MarkdocPath } from "./utils/userConfig";
-import type { Config } from "@markdoc/markdoc";
+import { parse, type Config } from "@markdoc/markdoc";
 import { getNamedImport } from "./utils/namedImports";
 import { ACFMap, acfMap } from "./factory/acfMap";
 
@@ -39,10 +39,10 @@ const getNodes = async (nodeUrl: URL, root: AstroConfig['root'], isNode: boolean
     const pathSplit = path.split("/")
     if(fs.existsSync(nodeUrl) && fs.lstatSync(nodeUrl).isDirectory()) {
         const partials = getFilesWithExtentions(nodeUrl, markdocFileRegex)
-        await Promise.all(partials.map( async partial => {
+        await Promise.all(partials.map(async partial => {
             const partialFileName = partial.pathname.split("/")
             const data = await fs.promises.readFile(partial.href.split(root.href)[1], 'utf8')
-            Object.assign(node, { [partialFileName[partialFileName.length - 1]]: data})
+            Object.assign(node, { [partialFileName[partialFileName.length - 1]]: parse(data)})
         }))
     } else {
         const obj = await import(path);
@@ -50,7 +50,7 @@ const getNodes = async (nodeUrl: URL, root: AstroConfig['root'], isNode: boolean
         for(const namedImport of namedImports) {
             if(isNode) {
                 const o = obj[namedImport]
-                ACFMap.add(o.render, namedImport);
+                ACFMap.add(path, namedImport);
                 Object.assign(node, { [namedImport] : { ...o, render: namedImport } });
             } else{
                 Object.assign(node, { [namedImport]: obj[namedImport] });

@@ -1,4 +1,4 @@
-import type { RenderableTreeNodes, NodeType, Node, Primitive, Scalar } from "@markdoc/markdoc/src/types";
+import type { RenderableTreeNodes, NodeType, Node, Primitive, Scalar, RenderableTreeNode } from "@markdoc/markdoc/src/types";
 import Tag from "@markdoc/markdoc/src/tag"
 import { 
     createComponent, 
@@ -18,35 +18,31 @@ import type { AstroInstance } from "astro";
 const { escapeHtml } = MarkdownIt().utils;
 import { AcfComponents } from '../virtual/imports.js'
 
-export async function MdocRender({ node } : { node : RenderableTreeNodes }): (Promise<AstroComponentFactory | Array<AstroComponentFactory>>) {
-
-    if(Array.isArray(node)) {
-        if(node.length > 1) {
-            const comp = await Promise.all(node.map(n => MdocRender({ node: n }) as any))
-            console.log('MdocRender: isArray ->', node)
-            return comp
-        } else if(node.length === 1) {
-            const comp = await MdocRender({ node: node[0] })
-            console.log('MdocRender: isSingleArray ->', node)
-            return comp
-        } else {
-            const comp = createComponent({
-                factory() {
-                    return render``
-                }
-            })
-            console.log('MdocRender: isEmptyArray ->', node)
-            return comp
-        }
+export async function MdocDeepRender({ node } : { node : RenderableTreeNodes }): Promise<AstroComponentFactory[]> {
+    if(isRenderableTreeNode(node) || !Array.isArray(node)) {
+        return [await MdocRender({ node })]
+    } else {
+        const comp = await Promise.all(node.map(async n => {
+            const c = await MdocRender({ node: n })
+            // console.log('MdocRender: isArrayItem ->', `node: ${n?.tag ?? n?.toLocaleString()} \n parent: ${node.toString()}`)
+            return c
+        }))
+        // console.log('MdocRender: isArray ->', node)
+        return comp
     }
+}
+
+export async function MdocRender({ node } : { node : RenderableTreeNode }): Promise<AstroComponentFactory> {
 
     if(isHTMLString(node)) {
         const comp = createComponent({
             factory() {
                 return render`${new HTMLString(node)}`
-            }
+            },
+            moduleId: 'isHTMLString',
+            propagation: 'self'
         })
-        console.log("MdocRender isHTMLString", `HTMLString: ${new HTMLString(node)}`)
+        // console.log("MdocRender isHTMLString", `HTMLString: ${new HTMLString(node)}`, `\ncomponent: ${comp}`)
         return comp
     }
 
@@ -55,8 +51,10 @@ export async function MdocRender({ node } : { node : RenderableTreeNodes }): (Pr
             factory() {
                 return render`${escapeHtml(String(node))}`
             },
+            moduleId: 'isStringOrNumber',
+            propagation: 'self'
         })
-        console.log("MdocRender isString || isNumber", `\n\ntext:${node}`)
+        // console.log("MdocRender isString || isNumber", `\n\ntext:${node}`)
         return comp
     }
 
@@ -66,11 +64,12 @@ export async function MdocRender({ node } : { node : RenderableTreeNodes }): (Pr
                 return render``
             }
         })
-        console.log('MdocRender: isNull | isNotObject | isNotTag -> ', node)
+        // console.log('MdocRender: isNull | isNotObject | isNotTag -> ', node, `\ncomponent: ${comp}`)
         return comp
     }
 
     const childNodes = await Promise.all(node.children.map(child => MdocRender({ node: child })))
+    // console.log('childNodes', childNodes)
 
     if(isFunction(node.name) || typeof node.name === 'function') {
         const component = node.name;
@@ -97,10 +96,12 @@ export async function MdocRender({ node } : { node : RenderableTreeNodes }): (Pr
                 });
     
                 return headAndContent;
-            }
+            },
+            moduleId: component.name ?? 'isFunction',
+            propagation: 'self'
         })
 
-        console.log('MdocRender: isFunction without head -> ', node)
+        // console.log('MdocRender: isFunction without head -> ', node, `\ncomponent: ${comp}`)
         return comp
     } else if (isPropagatedAssetsModule(node.name)) {
         const { collectedStyles, collectedLinks, collectedScripts } = node.name;
@@ -160,25 +161,27 @@ export async function MdocRender({ node } : { node : RenderableTreeNodes }): (Pr
                 });
         
                 return headAndContent;
-            }
+            },
+            moduleId: component.name ?? 'isPropagatedAssetsModule',
+            propagation: 'self'
         })
 
-        console.log('MdocRender: isPropagatedAssetModule -> ', node)
+        // console.log('MdocRender: isPropagatedAssetModule -> ', node, `\ncomponent: ${comp}`)
         return comp
     } else {
         if(typeof node.name === 'string') {
             const comp = await AcfComponents(node)
-            console.log('MdocRender: AcfComponent ->', node)
+            // console.log('MdocRender: AcfComponent ->', node, `component: ${comp}`)
             return comp
         } else {
             const comp = createComponent({
                 factory(result: any) {
                     return renderTemplate`${renderComponent(result, node.name, node.name, node.attributes, childNodes)}`
                 },
-                moduleId: node.name,
+                moduleId: node.name ?? 'isElement',
                 propagation: 'self'
             })
-            console.log("MdocRender: isElement-> ", node)
+            // console.log("MdocRender: isElement-> ", node, `\ncomponent: ${comp}`)
             return comp
         }
     }
@@ -340,4 +343,8 @@ export function isFunction(value: any): value is Function {
 
 export function isObject(value: any): value is Object {
     return typeof value === 'object'
+}
+
+export function isRenderableTreeNode(value: RenderableTreeNodes): value is RenderableTreeNode {
+    return !Array.isArray(value)
 }

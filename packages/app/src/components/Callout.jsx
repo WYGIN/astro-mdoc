@@ -35,7 +35,7 @@ export function Callout({ title, children, type }) {
           <span>{children}</span>
         </div>
       </div>
-      <style jsx>
+      <style jsx={'true'}>
         {`
           .callout {
             padding: 0.5rem 0 2rem;
