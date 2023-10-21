@@ -35,7 +35,7 @@ Examples are located under `/sample` or `/packages/app` folder
 
 ## Live Preview
 
-You can test `/packages/app` inside your local machine or you can go to the following [live project](astro-mdoc.wygin.co)
+You can test `/packages/app` inside your local machine or you can go to the following [live project](https://astro-mdoc-app.vercel.app/)
 
 ## 🚀 Project Structure
 
