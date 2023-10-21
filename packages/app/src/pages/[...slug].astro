@@ -1,10 +1,10 @@
 ---
-import { MarkdocRenderer } from 'astro-mdoc/src/virtual/imports.js'
-const Renderer = await MarkdocRenderer({ source: /*`{% callout type="check" %} Markdoc is open-source—check out its [source](http://github.com/markdoc/markdoc) to see how it works. {% /callout %}`*/
-`{% callout type="check" %}
-Markdoc is open-source—check out its [source](http://github.com/markdoc/markdoc) to see how it works.
-{% /callout %}` 
-});
+import { MarkdocRenderer } from 'astro-mdoc/src/virtual/imports.js';
+interface Props {
+    slug: string
+}
+const { slug } = Astro.props as Props;
+const Renderer = await MarkdocRenderer({ source: slug });
 /*`
     {% callout type="check" %}
         Markdoc is open-source—check out its [source](http://github.com/markdoc/markdoc) to see how it works.
