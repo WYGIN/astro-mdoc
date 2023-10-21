@@ -10,7 +10,14 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/react": "^3.0.3",
+    "@astrojs/vercel": "^5.0.2",
+    "@types/react": "^18.0.21",
+    "@types/react-dom": "^18.0.6",
     "astro": "^3.3.2",
-    "astro-mdoc": "^0.0.2"
+    "astro-mdoc": "^0.0.2",
+    "copy-to-clipboard": "^3.3.3",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   }
 }

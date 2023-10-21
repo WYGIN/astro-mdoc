@@ -1,6 +1,6 @@
 ---
 import { MarkdocRenderer } from 'astro-mdoc/src/virtual/imports.js';
-
+const { slug } = Astro.props;
 const Renderer = await MarkdocRenderer({ source: `{% callout type="check" %} Markdoc is open-source—check out its [source](http://github.com/markdoc/markdoc) to see how it works. {% /callout %}` });
 /*`
     {% callout type="check" %}
@@ -615,7 +615,3 @@ const Renderer = await MarkdocRenderer({ source: `{% callout type="check" %} Mar
         <Renderer />
     )
 }
-<!-- <p>UniqueImports: {'['+ Object.keys(UniqueImports) + ']'}</p>
-<p>MarkdocConfig: {JSON.stringify(MarkdocConfig)}</p>
-<p>ProjectContext: {JSON.stringify(ProjectContext)}</p>
-<p>UserConfig: {JSON.stringify(UserConfig)}</p> -->
