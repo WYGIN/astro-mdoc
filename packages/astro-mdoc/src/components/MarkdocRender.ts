@@ -1,5 +1,5 @@
-import type { RenderableTreeNodes, NodeType, Node, Primitive, Scalar, RenderableTreeNode } from "@markdoc/markdoc/src/types";
-import Tag from "@markdoc/markdoc/src/tag"
+import type { RenderableTreeNodes, RenderableTreeNode } from "@markdoc/markdoc/src/types";
+import Markdoc, * as MarkDoc from "@markdoc/markdoc";
 import { 
     createComponent, 
     type AstroComponentFactory,
@@ -54,7 +54,7 @@ export async function MdocRender({ node } : { node : RenderableTreeNode }): Prom
         return comp
     }
 
-    if(node === null || typeof node !== 'object' || !Tag.isTag(node)) {
+    if(node === null || typeof node !== 'object' || !Markdoc.Tag.isTag(node)) {
         const comp = createComponent({
             factory() {
                 return render``
