@@ -13,14 +13,11 @@ function resolveVirtualModuleId<T extends string>(id: T): `\0${T}` {
 export function vitePluginAstroMarkdocSSR(options: MarkdocUserConfig, { root }: Pick<AstroConfig, 'root'>, markdocConfig: Config): NonNullable<ViteUserConfig['plugins']>[number] {
     const resolveId = (id: string) => JSON.stringify(id.startsWith('.') ? resolve(fileURLToPath(root), id) : id);
 	let StringifiedMap = '';
-	[...acfMap].forEach(([key, value]) => StringifiedMap +=`${JSON.stringify(key)}: ${typeof value === 'function' ? value.toString() : JSON.stringify(value) },\n` )
+	[...acfMap].forEach(([key, value]) => StringifiedMap +=`export const ${key} = await import(${JSON.stringify(value) });\n`)
     const modules = {
         'virtual:wygin/user-config': `export default ${JSON.stringify(options)}`,
         'virtual:wygin/markdoc-unique-imports': `
-			const Obj = {
 				${StringifiedMap}
-			}
-			export default Obj
 		`,
         'virtual:wygin/markdoc-config': `export default ${JSON.stringify(markdocConfig)}`,
         'virtual:wygin/project-context': `export default ${JSON.stringify(root)}`,
@@ -82,7 +79,7 @@ export function vitePluginAstroMarkdocSSR(options: MarkdocUserConfig, { root }: 
 						children,
 					};
 				} else if(wygName in UniqueImports) {
-					const ComponentImport = await import(UniqueImports[wygName]);
+					const ComponentImport = UniqueImports[wygName];
 					const namedImport = ComponentImport[wygName]['render'] ?? wygName;
 					const component = createComponent({
 						factory(result) {
@@ -143,8 +140,6 @@ export function vitePluginAstroMarkdocSSR(options: MarkdocUserConfig, { root }: 
 				
 							return headAndContent;
 						},
-						// moduleId: namedImport?.name ?? wygName,
-						// propagation: 'self'
 					})
 					return {
 						type: 'component',
@@ -172,7 +167,6 @@ export function vitePluginAstroMarkdocSSR(options: MarkdocUserConfig, { root }: 
 				if(Array.isArray(node)) {
 					return await Promise.all(node.map(async n => {
 						const treeNode = await createTreeNode(n);
-						// console.log('AcfComponent:Array ->', treeNode);
 						return createComponent({
 							factory(result) {
 								return renderTemplate\`\${renderComponent(result, 'ComponentNode', ComponentNode, { treeNode })}\`;
@@ -183,7 +177,6 @@ export function vitePluginAstroMarkdocSSR(options: MarkdocUserConfig, { root }: 
 					}))
 				} else {
 					const treeNode = await createTreeNode(node);
-					// console.log('AcfComponent:single ->', treeNode);
 					return await Promise.resolve(createComponent({
 						factory(result) {
 							return renderTemplate\`\${renderComponent(result, 'ComponentNode', ComponentNode, { treeNode })}\`;
@@ -218,7 +211,6 @@ export function vitePluginAstroMarkdocSSR(options: MarkdocUserConfig, { root }: 
 
 			export default async function MdocParser({ source }) {
 				const ast = Markdoc.parse(source);
-				// console.log('ast', ast);
 				const errors = Markdoc.validate(ast, MarkdocConfig);
 				if (!errors) return errors
 				const content = Markdoc.transform(ast, MarkdocConfig);

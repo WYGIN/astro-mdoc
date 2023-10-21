@@ -38,101 +38,6 @@ export type TreeNode =
 			children: TreeNode[];
 	  };
 
-// export const ComponentNode = ({ treeNode }: { treeNode: TreeNode }): AstroComponentFactory => {
-// 	if(treeNode.type === 'text') {
-// 		return createComponent({
-// 			factory() {
-// 				return render`${escapeHtml(String(treeNode.content))}`;
-// 			},
-// 			moduleId: 'p',
-// 			propagation: 'self'
-// 		})
-// 	}
-
-// 	if(treeNode.type === 'component') {
-// 		return createComponent({
-// 			factory(result) {
-// 				const slots = {
-// 					default: () =>
-// 						render`${treeNode.children.map((child) =>
-// 							renderComponent(result, 'ComponentNode', ComponentNode, { treeNode: child })
-// 						)}`,
-// 				};
-// 				let styles = '',
-// 				links = '',
-// 				scripts = '';
-// 				if (Array.isArray(treeNode.collectedStyles)) {
-// 					styles = treeNode.collectedStyles
-// 						.map((style: any) =>
-// 							renderUniqueStylesheet(result, {
-// 								type: 'inline',
-// 								content: style,
-// 							})
-// 						)
-// 						.join('');
-// 				}
-// 				if (Array.isArray(treeNode.collectedLinks)) {
-// 					links = treeNode.collectedLinks
-// 						.map((link: any) => {
-// 							return renderUniqueStylesheet(result, {
-// 								type: 'external',
-// 								src: link[0] === '/' ? link : '/' + link,
-// 							});
-// 						})
-// 						.join('');
-// 				}
-// 				if (Array.isArray(treeNode.collectedScripts)) {
-// 					scripts = treeNode.collectedScripts
-// 						.map((script: any) => renderScriptElement(script))
-// 						.join('');
-// 				}
-
-// 				const head = unescapeHTML(styles + links + scripts);
-
-// 				let headAndContent = createHeadAndContent(
-// 					head as any,
-// 					renderTemplate`${renderComponent(
-// 						result,
-// 						treeNode.component.name,
-// 						treeNode.component,
-// 						treeNode.props,
-// 						slots
-// 					)}`
-// 				);
-
-// 				// Let the runtime know that this component is being used.
-// 				// `result.propagators` has been moved to `result._metadata.propagators`
-// 				// TODO: remove this fallback in the next markdoc integration major
-// 				const propagators = result._metadata.propagators || result.propagators;
-// 				propagators.add({
-// 					init() {
-// 						return headAndContent;
-// 					},
-// 				});
-
-// 				return headAndContent;
-
-// 			},
-// 			moduleId: treeNode.component.name ?? 'invalid',
-// 			propagation: 'self'
-// 		})
-// 	}
-
-// 	return createComponent({
-// 		factory(result) {
-// 			const slots = {
-// 				default: () =>
-// 					render`${treeNode.children.map((child) =>
-// 						renderComponent(result, 'ComponentNode', ComponentNode, { treeNode: child })
-// 					)}`,
-// 			};
-// 			return renderTemplate`${renderComponent(result, treeNode.tag, treeNode.tag, treeNode.attributes, slots)}`;
-// 		},
-// 		moduleId: treeNode.tag,
-// 		propagation: 'self'
-// 	})
-// }
-
 let treeNodeComp: TreeNode = {
 	type: 'element',
 	tag: 'invalidTag',
@@ -145,7 +50,6 @@ export const ComponentNode = createComponent({
 		treeNodeComp = treeNode;
 		if (treeNode.type === 'text') {
 			const r = render`${new HTMLString(treeNode.content)}`;
-			console.log('string render: ', r);
 			return r;
 		}
 

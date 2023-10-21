@@ -22,8 +22,3 @@ export function YouTube(props) {
     </div>
   );
 }
-
-// ---
-// const { props } = Astro.props;
-// ---
-// <iframe {...props} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="aspect-w-16 aspect-h-9 my-[var(--default-vertical-spacing)] rounded border-solid border-[1px] border-[color:var(--code-border)]"></iframe>
