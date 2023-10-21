@@ -6,7 +6,7 @@ import * as fs from 'node:fs';
 import { getMarkdocPath, type MarkdocPath } from "./utils/userConfig";
 import { parse, type Config } from "@markdoc/markdoc";
 import { getNamedImport } from "./utils/namedImports";
-import { ACFMap, acfMap } from "./factory/acfMap";
+import { ACFMap } from "./factory/acfMap";
 
 export default function AstroMarkdocSSR(options: MarkdocUserConfig): AstroIntegration {
     return AstroMarkdocSSRConfig({ options })

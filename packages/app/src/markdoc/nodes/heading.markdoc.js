@@ -1,4 +1,4 @@
-import { Tag } from '@markdoc/markdoc';
+import Markdoc from '@markdoc/markdoc';
 import { Heading } from '../../components/Heading';
 
 function generateID(children, attributes) {
@@ -26,6 +26,6 @@ export default {
     const children = node.transformChildren(config);
     const id = generateID(children, attributes);
 
-    return new Tag(this.render, { ...attributes, id }, children);
+    return new Markdoc.Tag(this.render, { ...attributes, id }, children);
   }
 };
