@@ -1,13 +1,13 @@
-import { tags } from '@markdoc/markdoc';
+import Markdoc from '@markdoc/markdoc';
 
 export { default as sideBySide } from './side-by-side.markdoc';
 
 export const partial = {
-  ...tags.partial,
+  ...Markdoc.tags.partial,
   inline: undefined
 };
 export const table = {
-  ...tags.table,
+  ...Markdoc.tags.table,
   inline: undefined
 };
 
