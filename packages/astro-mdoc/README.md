@@ -27,6 +27,21 @@ pnpm astro add astro-mdoc
 [![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/WYGIN/astro-mdoc/tree/main/sample/astro-mdoc)
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/WYGIN/astro-mdoc?devcontainer_path=.devcontainer/minimal/devcontainer.json)
 
+Now import MarkdocRenderer from Astro-MDoc and render component dynamically by passing Source, no extra action is required
+```astro
+---
+import { MarkdocRenderer } from 'astro-mdoc/src/virtual/imports.js';
+const Renderer = await MarkdocRenderer({ source: "your markdoc source"})
+---
+{
+    Array.isArray(Renderer) ? (
+        Renderer.map(Render => <Render />)
+    ) : (
+        <Renderer />
+    )
+}
+```
+
 > 🧑‍🚀 **Integrate MarkDoc With Astro**. Have fun!
 
 ## Examples 
