@@ -30,6 +30,9 @@ importers:
         specifier: ^5.5.2
         version: 5.5.2
     devDependencies:
+      '@types/markdown-it':
+        specifier: ^14.1.1
+        version: 14.1.1
       '@types/node':
         specifier: ^20.14.9
         version: 20.14.9
@@ -614,6 +617,9 @@ packages:
 
   '@types/markdown-it@12.2.3':
     resolution: {integrity: sha512-GKMHFfv3458yYy+v/N8gjufHO6MSZKCOXpZc5GXIWWy8uldwfmPn98vp81gZ5f9SVw8YYBctgfJ22a2d7AOMeQ==}
+
+  '@types/markdown-it@14.1.1':
+    resolution: {integrity: sha512-4NpsnpYl2Gt1ljyBGrKMxFYAYvpqbnnkgP/i/g+NLpjEUa3obn1XJCur9YbEXKDAkaXqsR1LbDnGEJ0MmKFxfg==}
 
   '@types/mdast@4.0.4':
     resolution: {integrity: sha512-kGaNbPh1k7AFzgpud/gMdvIm5xuECykRR+JnWKQno9TAXVa6WIVCGTPvYGekIDL4uwCZQSYbUxNBSb1aUo79oA==}
@@ -2455,8 +2461,7 @@ snapshots:
     dependencies:
       '@types/unist': 3.0.2
 
-  '@types/linkify-it@5.0.0':
-    optional: true
+  '@types/linkify-it@5.0.0': {}
 
   '@types/markdown-it@12.2.3':
     dependencies:
@@ -2464,12 +2469,16 @@ snapshots:
       '@types/mdurl': 2.0.0
     optional: true
 
+  '@types/markdown-it@14.1.1':
+    dependencies:
+      '@types/linkify-it': 5.0.0
+      '@types/mdurl': 2.0.0
+
   '@types/mdast@4.0.4':
     dependencies:
       '@types/unist': 3.0.2
 
-  '@types/mdurl@2.0.0':
-    optional: true
+  '@types/mdurl@2.0.0': {}
 
   '@types/ms@0.7.34': {}
 
