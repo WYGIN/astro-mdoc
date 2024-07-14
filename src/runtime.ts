@@ -15,7 +15,7 @@ export async function setupMdocConfig(config: AstroConfig, props: Record<string,
     if(options?.allowHTML) 
         return mergeConfig(mergedConfig, HTML_CONFIG)
 
-    return mergeConfig
+    return mergedConfig
 }
 
 export function createContentComponent(
@@ -26,7 +26,7 @@ export function createContentComponent(
 ) {
 	return createComponent({
 		async factory(result: any, props: Record<string, any>) {
-            let mdocConfig = mergeConfig(defaultMdocConfig, { variable: props })
+            let mdocConfig = mergeConfig(defaultMdocConfig, { variables: props })
 
 			return renderComponent(
                 result, 

@@ -111,7 +111,7 @@ export async function createTreeNode(node: RenderableTreeNode): Promise<TreeNode
 		return { type: 'text', content: '' };
 	}
 
-	const children = await Promise.all(node.children.map((child) => createTreeNode(child)));
+	const children = await Promise.all(node.children.map((child: any) => createTreeNode(child)));
 
 	if (typeof node.name === 'function') {
 		const component = node.name;
