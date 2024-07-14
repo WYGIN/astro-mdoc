@@ -1,27 +1,22 @@
 import type { AstroIntegration } from "astro";
-import type { MarkdocUserConfig } from "./utils/user-config";
-import { markdocUserConfig } from "./config";
-import { vitePluginAstroMarkdocSSR } from "./vite/mdoc-ssr";
+import { vitePluginAstroMdocConfig } from "./virtual-mdoc-config";
+import type { MarkdocIntegrationOptions } from "./options";
 
-export default function AstroMarkdocSSR(options: MarkdocUserConfig): AstroIntegration {
-    return AstroMarkdocSSRConfig({ options })
+export default function AstroMarkdocSSR(options: MarkdocIntegrationOptions): AstroIntegration {
+    return AstroMarkdocSSRConfig(options)
 }
 
-const AstroMarkdocSSRConfig = ({ options= {
-    allowHTML: false,
-    markdocPath: '/src/markdoc'
-} }: { options: MarkdocUserConfig}): AstroIntegration => {
+const AstroMarkdocSSRConfig = (options: MarkdocIntegrationOptions): AstroIntegration => {
     return {
         'name': 'astro-mdoc',
         hooks: {
             'astro:config:setup': async ({ config, updateConfig }) => {
-                const mdocConfig = await Promise.resolve(markdocUserConfig(config, options?.markdocPath))
-                const userConfig = {
+                let mdocPlugin = await vitePluginAstroMdocConfig(config, options);
+                updateConfig({
                     vite: {
-                        plugins: [vitePluginAstroMarkdocSSR(options, config, mdocConfig)]
+                        plugins: [mdocPlugin]
                     }
-                };
-                updateConfig(userConfig);
+                })
             }
         }
     }
