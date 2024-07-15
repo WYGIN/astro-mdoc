@@ -10,7 +10,7 @@ function resolveVirtualModuleId<T extends string>(id: T): `\0${T}` {
 
 /** Vite plugin that exposes Astro mdoc config and project context via virtual modules. */
 export async function vitePluginAstroMdocConfig(config: AstroConfig, options: MarkdocIntegrationOptions | undefined): Promise<NonNullable<ViteUserConfig['plugins']>[number]> {
-    let mdocConfig = await setupMdocConfig(config, [], options)
+    let mdocConfig = await setupMdocConfig(config, [], options);
     let StringifiedAstroMdocComponentImports = '';
 	[...acfMap].forEach(
         ([key, value]) => 
